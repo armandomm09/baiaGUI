@@ -49,6 +49,20 @@ class _AllOrdersState extends State<AllOrders> {
   }
 }
 
+finishOrder(String oID) async {
+  try {
+    final url = Uri.parse("http://127.0.0.1:8000/Sushi_Restaurant/orders/$oID/finishOrder");
+    final response = await http.patch(url);
+
+    if(response.statusCode == 200){
+      return response.body;
+    }
+  } catch (e) {
+    print("Error at $e");
+    return "Error at $e";
+  }
+}
+
   getOrders() {
     if (orderExistance) {
       return StreamBuilder<List<dynamic>>(
@@ -62,7 +76,7 @@ class _AllOrdersState extends State<AllOrders> {
             return const Center(child: Text('No hay órdenes activas.'));
           } else {
             final orders = snapshot.data!;
-
+            print(orders[0]);
             return ListView(
               children: orders
                   .asMap()
@@ -79,9 +93,12 @@ class _AllOrdersState extends State<AllOrders> {
                           child: CupertinoContextMenu(
                             actions: <Widget>[
                               CupertinoContextMenuAction(
-                                child: Text("Action 1"),
+                                child: Text("Finish Order"),
                                 trailingIcon: CupertinoIcons.add,
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await  finishOrder(order["ID"]);
+                                  Navigator.pop(context);
+                                },
                               ),
                               CupertinoContextMenuAction(
                                 child: Text("Action 2"),
@@ -97,7 +114,7 @@ class _AllOrdersState extends State<AllOrders> {
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.15,
                               width: MediaQuery.of(context).size.width * 0.8,
-                              child: LatestOrderClip(allOrder: orders[0]),
+                              child: LatestOrderClip(allOrder: order),
                             ),
                           ),
                         ),
