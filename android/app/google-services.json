@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "602166267311",
+    "firebase_url": "https://baia-1df5a-default-rtdb.firebaseio.com",
+    "project_id": "baia-1df5a",
+    "storage_bucket": "baia-1df5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602166267311:android:e89d065506f896e96df35a",
+        "android_client_info": {
+          "package_name": "com.example.baia_ui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkb4NJ0FQPVF1BID-ykrzhAzT2htmSR24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

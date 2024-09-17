@@ -1,0 +1,36 @@
+name: baia_ui
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  carousel_slider: ^5.0.0
+  cloud_firestore: ^5.1.0
+  firebase_auth: ^5.1.2
+  firebase_core: ^3.2.0
+  fl_chart: ^0.68.0
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.0
+  flutter_client_sse: ^2.0.2
+  flutter_map: ^7.0.2
+  google_maps_flutter: ^2.6.1
+  intl: ^0.19.0
+  latlong2: ^0.9.1
+  universal_html: ^2.2.4
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  assets:
+    - assets/ventasBg.png
+    - assets/baiaClearBg.png
+
+  uses-material-design: true
