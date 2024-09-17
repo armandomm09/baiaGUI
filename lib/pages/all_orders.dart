@@ -23,47 +23,64 @@ class _AllOrdersState extends State<AllOrders> {
     _orderStream = _getOrderStream();
   }
 
- Stream<List<dynamic>> _getOrderStream() async* {
-  while (true) {
-    try {
-      final url =
-          Uri.parse('http://127.0.0.1:8000/Sushi_Restaurant/orders/active');
-      final response = await http.get(url, headers: {
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+  changeOrderExistance(bool orderExistanceP) {
+    if (mounted) {
+      setState(() {
+        orderExistance = orderExistanceP;
       });
+    }
+  }
+
+  Stream<List<dynamic>> _getOrderStream() async* {
+    while (true) {
+      try {
+        final url =
+            Uri.parse('http://127.0.0.1:8000/Sushi_Restaurant/orders/active');
+        final response = await http.get(url, headers: {
+          'Cache-Control': 'no-cache',
+        });
+
+        if (response.statusCode == 200) {
+          final List<dynamic> jsonList = jsonDecode(response.body);
+          print("JSONLIST: $jsonList");
+
+          // Actualiza la UI cuando haya datos
+          changeOrderExistance(true);
+
+          yield jsonList;
+        } else {
+          print('Error: ${response.statusCode} ${response.body}');
+        }
+      } catch (e) {
+        // Actualiza la UI cuando no haya datos
+        yield[];
+        // changeOrderExistance(false);
+        print('Catched Error: $e');
+      }
+
+      // Esperar antes de hacer la siguiente solicitud
+      await Future.delayed(
+          Duration(seconds: 2)); // Ajusta el tiempo según sea necesario
+    }
+  }
+
+  finishOrder(String oID) async {
+    try {
+      final url = Uri.parse(
+          "http://127.0.0.1:8000/Sushi_Restaurant/orders/$oID/finishOrder");
+      final response = await http.patch(url);
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonList = jsonDecode(response.body);
-        yield jsonList;
-      } else {
-        // Manejar el error si la respuesta no es exitosa
-        print('Error: ${response.statusCode}');
+        return response.body;
       }
     } catch (e) {
-      print('Error: $e');
+      print("Error at $e");
+      return "Error at $e";
     }
-
-    // Esperar antes de hacer la siguiente solicitud
-    await Future.delayed(Duration(seconds: 2)); // Ajusta el tiempo según sea necesario
   }
-}
-
-finishOrder(String oID) async {
-  try {
-    final url = Uri.parse("http://127.0.0.1:8000/Sushi_Restaurant/orders/$oID/finishOrder");
-    final response = await http.patch(url);
-
-    if(response.statusCode == 200){
-      return response.body;
-    }
-  } catch (e) {
-    print("Error at $e");
-    return "Error at $e";
-  }
-}
 
   getOrders() {
+    print(orderExistance);
     if (orderExistance) {
       return StreamBuilder<List<dynamic>>(
         stream: _orderStream,
@@ -76,7 +93,7 @@ finishOrder(String oID) async {
             return const Center(child: Text('No hay órdenes activas.'));
           } else {
             final orders = snapshot.data!;
-            print(orders[0]);
+            // print(orders);
             return ListView(
               children: orders
                   .asMap()
@@ -96,7 +113,7 @@ finishOrder(String oID) async {
                                 child: Text("Finish Order"),
                                 trailingIcon: CupertinoIcons.add,
                                 onPressed: () async {
-                                  await  finishOrder(order["ID"]);
+                                  await finishOrder(order["ID"]);
                                   Navigator.pop(context);
                                 },
                               ),
