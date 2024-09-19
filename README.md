@@ -1,4 +1,4 @@
-# BAIA - Flutter Mobile App
+# BAIA - Mobile App
 
 The BAIA Flutter app is the front-end component of the BAIA system, designed to offer a user-friendly interface for managing and visualizing WhatsApp bot functionalities. This mobile application allows businesses to interact with their bot, customize commands, and monitor interactions in real-time.
 
